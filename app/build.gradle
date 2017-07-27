@@ -1,14 +1,17 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "26.0.0"
+    def globalConfig = rootProject.extensions.getByName("ext")
+
+    compileSdkVersion globalConfig.getAt("androidCompileSdkVersion")
+    buildToolsVersion globalConfig.getAt("androidBuildToolVersion")
     defaultConfig {
-        applicationId "com.yueban.architecturedemo"
-        minSdkVersion 15
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        applicationId globalConfig.getAt("androidApplicationId")
+        minSdkVersion globalConfig.getAt("androidMinSdkVersion")
+        targetSdkVersion globalConfig.getAt("androidTargetSdkVersion")
+        versionCode globalConfig.getAt("androidVersionCode")
+        versionName globalConfig.getAt("androidVersionName")
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -17,14 +20,55 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.1'
+        resolutionStrategy.force 'com.android.support:support-annotations:' + globalConfig.getAt("supportVersion")
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'libs' //this way we can find the .aar file in libs folder
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
+    def dependencies = rootProject.ext.appDependencies
+
+    compile dependencies.appcompt
+    compile dependencies.design
+    compile dependencies.recyclerview
+    compile dependencies.cardview
+    compile dependencies.constraintLayout
+    compile dependencies.commonUtils
+    compile dependencies.gson
+    compile dependencies.fastjson
+    compile dependencies.rxJava
+    compile dependencies.rxjavaProguard
+    compile dependencies.rxAndroid
+    compile dependencies.rxlifecycle
+    compile dependencies.rxlifecycleComponents
+    compile dependencies.eventBus
+    apt dependencies.eventBusProcessor
+    compile dependencies.retrofit
+    compile dependencies.retrofitAdapterRxJava
+    compile dependencies.rxbinding
+    compile dependencies.rxbindingV4
+    compile dependencies.rxbindingV7
+    compile dependencies.rxbindingDesign
+    compile dependencies.rxbindingRecycleView
+    compile dependencies.butterKnife
+    apt dependencies.butterKnifeCompiler
+    apt dependencies.bundlerAnnotations
+    compile dependencies.bundlerCompiler
+    compile dependencies.rxPermissions
+    compile dependencies.picasso
+    compile dependencies.roundedimageview
+    compile dependencies.materialDialog
+    compile dependencies.materialedittext
+    compile dependencies.statusbarutil
+
+    def testDependencies = rootProject.ext.appTestDependencies
+    testCompile testDependencies.junit
+    androidTestCompile testDependencies.espresso
 }

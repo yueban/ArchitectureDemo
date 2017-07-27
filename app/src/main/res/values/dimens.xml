@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 字号 -->
+    <dimen name="sp_text_size_large">22sp</dimen>
+    <dimen name="sp_text_size_medium">18sp</dimen>
+    <dimen name="sp_text_size_normal">16sp</dimen>
+    <dimen name="sp_text_size_small">14sp</dimen>
+    <dimen name="sp_text_size_mini">12sp</dimen>
+    <!-- 外边距 -->
+    <dimen name="md_item_margin_max">32dp</dimen>
+    <dimen name="md_item_margin_large">24dp</dimen>
+    <dimen name="md_item_margin_medium">16dp</dimen>
+    <dimen name="md_item_margin_small">8dp</dimen>
+    <!-- fab -->
+    <dimen name="fab_margin">10dp</dimen>
+    <!-- 内边距 -->
+    <dimen name="md_item_padding_max">32dp</dimen>
+    <dimen name="md_item_padding_large">24dp</dimen>
+    <dimen name="md_item_padding_medium">16dp</dimen>
+    <dimen name="md_item_padding_small">8dp</dimen>
+    <!-- toolbar -->
+    <dimen name="toolbar_height">56dp</dimen>
+    <!-- bottom navigation -->
+    <dimen name="bottom_nav_height">56dp</dimen>
+</resources>

@@ -1,11 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="ToolBarBaseStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/toolbar_height</item>
+        <item name="android:minHeight">@dimen/toolbar_height</item>
+        <item name="android:layerType">hardware</item>
+        <item name="android:background">@color/toolbar_default</item>
     </style>
 
+    <!-- ToolBar标题字体 -->
+    <style name="Toolbar_Title_Default" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/sp_text_size_medium</item>
+    </style>
+
+    <style name="Toolbar_SubTitle_Default" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/sp_text_size_mini</item>
+    </style>
+
+    <!-- 文字 -->
+    <style name="Text_Title">
+        <item name="android:textColor">@color/text_main</item>
+        <item name="android:textSize">@dimen/sp_text_size_normal</item>
+    </style>
+
+    <style name="Text_SubTitle">
+        <item name="android:textColor">@color/text_sub</item>
+        <item name="android:textSize">@dimen/sp_text_size_small</item>
+    </style>
 </resources>

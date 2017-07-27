@@ -1,0 +1,67 @@
+package com.yueban.architecturedemo.ui.main.view;
+
+import android.widget.TextView;
+import butterknife.BindView;
+import com.yueban.architecturedemo.R;
+import com.yueban.architecturedemo.data.model.net.Repo;
+import com.yueban.architecturedemo.ui.base.presenter.IPresenter;
+import com.yueban.architecturedemo.ui.base.view.BaseActivity;
+import com.yueban.architecturedemo.ui.main.presenter.IMainPresenter;
+import com.yueban.architecturedemo.ui.main.presenter.impl.MainPresenter;
+import com.yueban.architecturedemo.util.CollectionUtil;
+import com.yueban.architecturedemo.util.rx.RxViewUtil;
+import java.util.List;
+import rx.functions.Action1;
+
+public class MainActivity extends BaseActivity implements IMainView {
+    @BindView(R.id.text_view) TextView mTextView;
+    private IMainPresenter mPresenter;
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void initInjector() {
+        mPresenter = new MainPresenter();
+    }
+
+    @Override
+    protected IPresenter bindPresenter() {
+        return mPresenter;
+    }
+
+    @Override
+    protected void setView() {
+        RxViewUtil.clicks(mTextView).subscribe(new Action1<Void>() {
+            @Override
+            public void call(Void aVoid) {
+                mPresenter.requestNetData();
+            }
+        });
+    }
+
+    @Override
+    protected void initToolbar() {
+        if (mToolbar != null) {
+            setSupportActionBar(mToolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayUseLogoEnabled(false);
+                getSupportActionBar().setDisplayShowTitleEnabled(true);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                getSupportActionBar().setHomeButtonEnabled(false);
+            }
+        }
+    }
+
+    @Override
+    protected void initData() {
+        mPresenter.requestNetData();
+    }
+
+    @Override
+    public void showRepoData(List<Repo> repos) {
+        mTextView.setText(CollectionUtil.toString(repos));
+    }
+}
