@@ -2,7 +2,9 @@ package com.yueban.architecturedemo.ui.main.view;
 
 import com.yueban.architecturedemo.data.model.net.Repo;
 import com.yueban.architecturedemo.ui.base.view.IView;
+import com.yueban.architecturedemo.ui.main.event.NetworkCompleteEvent;
 import java.util.List;
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * @author yueban
@@ -11,4 +13,7 @@ import java.util.List;
  */
 public interface IMainView extends IView {
     void showRepoData(List<Repo> repos);
+
+    @Subscribe
+    void onNetworkCompleteEvent(NetworkCompleteEvent networkCompleteEvent);
 }

@@ -30,6 +30,7 @@ import com.yueban.architecturedemo.ui.base.presenter.BasePresenter;
 import com.yueban.architecturedemo.ui.base.presenter.IPresenter;
 import com.yueban.architecturedemo.util.L;
 import com.yueban.architecturedemo.util.MessageFactory;
+import com.yueban.architecturedemo.util.eventbus.EventBusInstance;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.subjects.BehaviorSubject;
@@ -245,12 +246,15 @@ public abstract class BaseActivity extends AppCompatActivity implements IView, L
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         mLifecycleSubject.onNext(ActivityEvent.DESTROY);
         if (mPresenter != null && mPresenter instanceof BasePresenter) {
             ((BasePresenter) mPresenter).destroy();
             mPresenter = null;
         }
+        if (EventBusInstance.getBus().isRegistered(this)) {
+            EventBusInstance.getBus().unregister(this);
+        }
+        super.onDestroy();
     }
 
     @Override

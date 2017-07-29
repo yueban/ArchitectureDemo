@@ -23,6 +23,7 @@ import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
 import com.yueban.architecturedemo.ui.base.presenter.BasePresenter;
 import com.yueban.architecturedemo.ui.base.presenter.IPresenter;
 import com.yueban.architecturedemo.util.L;
+import com.yueban.architecturedemo.util.eventbus.EventBusInstance;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.subjects.BehaviorSubject;
@@ -162,8 +163,11 @@ public abstract class BaseFragment extends Fragment implements IView, LifecycleP
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         mLifecycleSubject.onNext(FragmentEvent.DESTROY);
+        if (EventBusInstance.getBus().isRegistered(this)) {
+            EventBusInstance.getBus().unregister(this);
+        }
+        super.onDestroy();
     }
 
     @Override

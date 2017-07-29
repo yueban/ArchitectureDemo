@@ -32,6 +32,13 @@ repositories {
     }
 }
 
+//EventBus
+apt {
+    arguments {
+        eventBusIndex "com.yueban.architecturedemo.util.eventbus.EventBusIndex"
+    }
+}
+
 dependencies {
     def dependencies = rootProject.ext.appDependencies
 
