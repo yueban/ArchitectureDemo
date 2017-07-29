@@ -18,21 +18,21 @@ import android.view.ViewStub;
 import butterknife.ButterKnife;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.jaeger.library.StatusBarUtil;
-import com.tbruyelle.rxpermissions.Permission;
-import com.tbruyelle.rxpermissions.RxPermissions;
-import com.trello.rxlifecycle.LifecycleProvider;
-import com.trello.rxlifecycle.LifecycleTransformer;
-import com.trello.rxlifecycle.RxLifecycle;
-import com.trello.rxlifecycle.android.ActivityEvent;
-import com.trello.rxlifecycle.android.RxLifecycleAndroid;
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.trello.rxlifecycle2.LifecycleProvider;
+import com.trello.rxlifecycle2.LifecycleTransformer;
+import com.trello.rxlifecycle2.RxLifecycle;
+import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
 import com.yueban.architecturedemo.R;
 import com.yueban.architecturedemo.ui.base.presenter.BasePresenter;
 import com.yueban.architecturedemo.ui.base.presenter.IPresenter;
 import com.yueban.architecturedemo.util.L;
 import com.yueban.architecturedemo.util.MessageFactory;
-import javax.annotation.Nonnull;
-import rx.Observable;
-import rx.subjects.BehaviorSubject;
+import io.reactivex.Observable;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * @author yueban
@@ -330,7 +330,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IView, L
     }
 
     @Override
-    public final Observable.Transformer<Object, Permission> requestPermissionTransform(String... permissions) {
+    public final ObservableTransformer<Object, Permission> requestPermissionTransform(String... permissions) {
         return getRxPermissions().ensureEach(permissions);
     }
 
@@ -342,26 +342,26 @@ public abstract class BaseActivity extends AppCompatActivity implements IView, L
         return mRxPermissions;
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public final Observable<ActivityEvent> lifecycle() {
-        return mLifecycleSubject.asObservable();
+        return mLifecycleSubject.hide();
     }
 
-    @Nonnull
+    @NonNull
     @Override
-    public final <T> LifecycleTransformer<T> bindUntilEvent(@Nonnull ActivityEvent event) {
+    public final <T> LifecycleTransformer<T> bindUntilEvent(@NonNull ActivityEvent event) {
         return RxLifecycle.bindUntilEvent(mLifecycleSubject, event);
     }
 
-    @Nonnull
+    @NonNull
     @Override
     public final <T> LifecycleTransformer<T> bindToLifecycle() {
         return RxLifecycleAndroid.bindActivity(mLifecycleSubject);
     }
 
     @NonNull
-    public final <T> Observable.Transformer<T, T> bindToDestroyEvent() {
+    public final <T> ObservableTransformer<T, T> bindToDestroyEvent() {
         return bindUntilEvent(ActivityEvent.DESTROY);
     }
 }

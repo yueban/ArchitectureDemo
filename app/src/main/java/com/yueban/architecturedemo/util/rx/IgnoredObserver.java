@@ -5,7 +5,7 @@ package com.yueban.architecturedemo.util.rx;
  * @date 2017/7/29
  * @email fbzhh007@gmail.com
  */
-public class IgnoredSubscriber<T> extends SimpleSubscriber<T> {
+public class IgnoredObserver<T> extends SimpleObserver<T> {
     @Override
     public void onNext(T t) {
 

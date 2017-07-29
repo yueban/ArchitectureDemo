@@ -44,7 +44,6 @@ dependencies {
     compile dependencies.gson
     compile dependencies.fastjson
     compile dependencies.rxJava
-    compile dependencies.rxjavaProguard
     compile dependencies.rxAndroid
     compile dependencies.rxlifecycle
     compile dependencies.rxlifecycleComponents

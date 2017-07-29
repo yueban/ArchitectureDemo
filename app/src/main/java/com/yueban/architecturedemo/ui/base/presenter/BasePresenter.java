@@ -1,14 +1,15 @@
 package com.yueban.architecturedemo.ui.base.presenter;
 
 import android.support.annotation.NonNull;
-import com.trello.rxlifecycle.RxLifecycle;
-import com.yueban.architecturedemo.util.rxlifecycle.PresenterEvent;
-import com.yueban.architecturedemo.util.rxlifecycle.PresenterLifecycleProvider;
+import com.trello.rxlifecycle2.RxLifecycle;
 import com.yueban.architecturedemo.ui.base.view.BaseActivity;
 import com.yueban.architecturedemo.ui.base.view.BaseFragment;
 import com.yueban.architecturedemo.ui.base.view.IView;
-import rx.Observable;
-import rx.subjects.BehaviorSubject;
+import com.yueban.architecturedemo.util.rxlifecycle.PresenterEvent;
+import com.yueban.architecturedemo.util.rxlifecycle.PresenterLifecycleProvider;
+import io.reactivex.Observable;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * @author yueban
@@ -84,23 +85,23 @@ public class BasePresenter<T extends IView> implements IPresenter, PresenterLife
     @NonNull
     @Override
     public final Observable<PresenterEvent> lifecycle() {
-        return lifecycleSubject.asObservable();
+        return lifecycleSubject.hide();
     }
 
     @NonNull
     @Override
-    public final <F> Observable.Transformer<F, F> bindUntilEvent(@NonNull PresenterEvent event) {
+    public final <F> ObservableTransformer<F, F> bindUntilEvent(@NonNull PresenterEvent event) {
         return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
     }
 
     @NonNull
-    public final <F> Observable.Transformer<F, F> bindToDestroyEvent() {
+    public final <F> ObservableTransformer<F, F> bindToDestroyEvent() {
         return bindUntilEvent(PresenterEvent.DESTROY);
     }
 
     @NonNull
     @Override
-    public <F> Observable.Transformer<F, F> bindToLifecycle() {
+    public <F> ObservableTransformer<F, F> bindToLifecycle() {
         return RxLifecycle.bind(lifecycleSubject, PRESENTER_LIFECYCLE);
     }
 }

@@ -2,8 +2,8 @@ package com.yueban.architecturedemo.domain.main;
 
 import com.yueban.architecturedemo.data.model.net.Repo;
 import com.yueban.architecturedemo.data.net.NetRepository;
+import io.reactivex.Observable;
 import java.util.List;
-import rx.Observable;
 
 /**
  * @author yueban

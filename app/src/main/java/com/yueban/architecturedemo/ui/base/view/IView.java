@@ -2,9 +2,10 @@ package com.yueban.architecturedemo.ui.base.view;
 
 import android.content.Context;
 import android.support.annotation.StringRes;
-import com.tbruyelle.rxpermissions.Permission;
-import com.tbruyelle.rxpermissions.RxPermissions;
-import rx.Observable;
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+import io.reactivex.Observable;
+import io.reactivex.ObservableTransformer;
 
 /**
  * @author yueban
@@ -61,7 +62,7 @@ public interface IView {
      *
      * @param permissions 权限数组
      */
-    Observable.Transformer<Object, Permission> requestPermissionTransform(String... permissions);
+    ObservableTransformer<Object, Permission> requestPermissionTransform(String... permissions);
 
     /**
      * 获取 RxPermissions 对象

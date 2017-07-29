@@ -6,7 +6,7 @@ import com.yueban.architecturedemo.ui.base.presenter.BasePresenter;
 import com.yueban.architecturedemo.ui.main.presenter.IMainPresenter;
 import com.yueban.architecturedemo.ui.main.view.IMainView;
 import com.yueban.architecturedemo.util.rx.RxUtil;
-import com.yueban.architecturedemo.util.rx.SimpleSubscriber;
+import com.yueban.architecturedemo.util.rx.SimpleObserver;
 import java.util.List;
 
 /**
@@ -20,7 +20,7 @@ public class MainPresenter<T extends IMainView> extends BasePresenter<T> impleme
         MainViewData.listRepos("yueban")
             .compose(RxUtil.<List<Repo>>common(mView))
             .compose(this.<List<Repo>>bindToDestroyEvent())
-            .subscribe(new SimpleSubscriber<List<Repo>>() {
+            .subscribe(new SimpleObserver<List<Repo>>() {
                 @Override
                 public void onNext(List<Repo> repos) {
                     mView.showRepoData(repos);

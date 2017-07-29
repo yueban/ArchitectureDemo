@@ -1,10 +1,10 @@
 package com.yueban.architecturedemo.data.net.service;
 
 import com.yueban.architecturedemo.data.model.net.Repo;
+import io.reactivex.Observable;
 import java.util.List;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
-import rx.Observable;
 
 /**
  * @author yueban

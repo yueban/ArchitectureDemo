@@ -4,14 +4,18 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import com.yueban.architecturedemo.ui.base.view.IView;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
 import java.util.List;
-import rx.Observable;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * @author yueban
@@ -23,11 +27,11 @@ public class RxUtil {
         throw new AssertionError();
     }
 
-    public static <T> Observable.Transformer<T, T> applyAsySchedulers() {
-        return new Observable.Transformer<T, T>() {
+    public static <T> ObservableTransformer<T, T> applyAsySchedulers() {
+        return new ObservableTransformer<T, T>() {
             @Override
-            public Observable<T> call(Observable<T> observable) {
-                return observable.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io());
+            public ObservableSource<T> apply(@io.reactivex.annotations.NonNull Observable<T> upstream) {
+                return upstream.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io());
             }
         };
     }
@@ -35,21 +39,21 @@ public class RxUtil {
     /**
      * 基于 {@link IView#showLoadingDialog()}
      */
-    public static <T> Observable.Transformer<T, T> loadingView(@NonNull final IView view) {
-        return new Observable.Transformer<T, T>() {
+    public static <T> ObservableTransformer<T, T> loadingView(@NonNull final IView view) {
+        return new ObservableTransformer<T, T>() {
             @Override
-            public Observable<T> call(Observable<T> observable) {
-                return observable.doOnSubscribe(new Action0() {
+            public ObservableSource<T> apply(@io.reactivex.annotations.NonNull Observable<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
                     @Override
-                    public void call() {
+                    public void accept(Disposable disposable) throws Exception {
                         view.showLoadingDialog();
                     }
-                }).doAfterTerminate(new Action0() {
+                }).doAfterTerminate(new Action() {
                     /**
-                     * 在调用 {@link Observer#onCompleted()} 或者 {@link Observer#onError(Throwable)} 之后隐藏 loading
+                     * 在调用 {@link Observer#onComplete()} 或者 {@link Observer#onError(Throwable)} 之后隐藏 loading
                      */
                     @Override
-                    public void call() {
+                    public void run() throws Exception {
                         view.hideLoadingDialog();
                     }
                 });
@@ -64,16 +68,16 @@ public class RxUtil {
      * @param <T>       列表中的元素类型
      * @return 原列表类型
      */
-    public static <T> Observable.Transformer<List<T>, List<T>> filter(final Func1<T, Boolean> predicate) {
-        return new Observable.Transformer<List<T>, List<T>>() {
+    public static <T> ObservableTransformer<List<T>, List<T>> filter(final Predicate<T> predicate) {
+        return new ObservableTransformer<List<T>, List<T>>() {
             @Override
-            public Observable<List<T>> call(Observable<List<T>> observable) {
-                return observable.flatMap(new Func1<List<T>, Observable<T>>() {
+            public ObservableSource<List<T>> apply(@io.reactivex.annotations.NonNull Observable<List<T>> upstream) {
+                return upstream.flatMap(new Function<List<T>, ObservableSource<T>>() {
                     @Override
-                    public Observable<T> call(List<T> ts) {
-                        return Observable.from(ts);
+                    public ObservableSource<T> apply(@io.reactivex.annotations.NonNull List<T> ts) throws Exception {
+                        return Observable.fromIterable(ts);
                     }
-                }).filter(predicate).toList();
+                }).filter(predicate).toList().toObservable();
             }
         };
     }
@@ -86,17 +90,17 @@ public class RxUtil {
      * @param <T>       列表元素类型
      * @return 过滤后的列表
      */
-    public static <T> List<T> filter(List<T> ts, final Func1<T, Boolean> predicate) {
-        return Observable.from(ts).filter(predicate).toList().toBlocking().first();
+    public static <T> List<T> filter(List<T> ts, final Predicate<T> predicate) {
+        return Observable.fromIterable(ts).filter(predicate).toList().toObservable().blockingFirst();
     }
 
     /**
      * 过滤 List<String> 中的空字符串
      */
-    public static Observable.Transformer<List<String>, List<String>> filterEmptyString() {
-        return filter(new Func1<String, Boolean>() {
+    public static ObservableTransformer<List<String>, List<String>> filterEmptyString() {
+        return filter(new Predicate<String>() {
             @Override
-            public Boolean call(String s) {
+            public boolean test(@io.reactivex.annotations.NonNull String s) throws Exception {
                 return !TextUtils.isEmpty(s);
             }
         });
@@ -105,13 +109,13 @@ public class RxUtil {
     /**
      * 通用错误处理
      */
-    public static <T> Observable.Transformer<T, T> error(final IView view, final String message) {
-        return new Observable.Transformer<T, T>() {
+    public static <T> ObservableTransformer<T, T> error(final IView view, final String message) {
+        return new ObservableTransformer<T, T>() {
             @Override
-            public Observable<T> call(Observable<T> observable) {
-                return observable.doOnError(new Action1<Throwable>() {
+            public ObservableSource<T> apply(@io.reactivex.annotations.NonNull Observable<T> upstream) {
+                return upstream.doOnError(new Consumer<Throwable>() {
                     @Override
-                    public void call(Throwable throwable) {
+                    public void accept(Throwable throwable) throws Exception {
                         view.showError(throwable, message);
                     }
                 });
@@ -119,24 +123,24 @@ public class RxUtil {
         };
     }
 
-    public static <T> Observable.Transformer<T, T> error(final IView view) {
+    public static <T> ObservableTransformer<T, T> error(final IView view) {
         return error(view, null);
     }
 
-    public static <T> Observable.Transformer<T, T> error(final IView view, @StringRes int resId) {
+    public static <T> ObservableTransformer<T, T> error(final IView view, @StringRes int resId) {
         return error(view, view.context().getResources().getString(resId));
     }
 
-    public static <T> Observable.Transformer<List<T>, List<T>> sort() {
-        return new Observable.Transformer<List<T>, List<T>>() {
+    public static <T> ObservableTransformer<List<T>, List<T>> sort() {
+        return new ObservableTransformer<List<T>, List<T>>() {
             @Override
-            public Observable<List<T>> call(Observable<List<T>> observable) {
-                return observable.flatMap(new Func1<List<T>, Observable<T>>() {
+            public ObservableSource<List<T>> apply(@io.reactivex.annotations.NonNull Observable<List<T>> upstream) {
+                return upstream.flatMap(new Function<List<T>, ObservableSource<T>>() {
                     @Override
-                    public Observable<T> call(List<T> sessions) {
-                        return Observable.from(sessions);
+                    public ObservableSource<T> apply(@io.reactivex.annotations.NonNull List<T> ts) throws Exception {
+                        return Observable.fromIterable(ts);
                     }
-                }).toSortedList();
+                }).toSortedList().toObservable();
             }
         };
     }
@@ -144,11 +148,11 @@ public class RxUtil {
     /**
      * 常用的组合
      */
-    public static <T> Observable.Transformer<T, T> common(final IView view) {
-        return new Observable.Transformer<T, T>() {
+    public static <T> ObservableTransformer<T, T> common(final IView view) {
+        return new ObservableTransformer<T, T>() {
             @Override
-            public Observable<T> call(Observable<T> observable) {
-                return observable.compose(RxUtil.<T>applyAsySchedulers())
+            public ObservableSource<T> apply(@io.reactivex.annotations.NonNull Observable<T> upstream) {
+                return upstream.compose(RxUtil.<T>applyAsySchedulers())
                     .compose(RxUtil.<T>loadingView(view))
                     .compose(RxUtil.<T>error(view));
             }

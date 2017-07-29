@@ -18,7 +18,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 /**
  * @author yueban
@@ -33,7 +33,7 @@ public final class RetrofitInstance {
 
         Retrofit.Builder builder = new Retrofit.Builder().baseUrl(NetConstant.BASE_URL)
             .client(getOkHttpClient())
-            .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create());
 
         try {
             // 修改retrofit的convertFactories的设置, 去掉其默认值BuiltInConverters(), 替换为GsonConvertFactory.

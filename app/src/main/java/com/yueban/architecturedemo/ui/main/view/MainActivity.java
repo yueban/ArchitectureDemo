@@ -10,8 +10,8 @@ import com.yueban.architecturedemo.ui.main.presenter.IMainPresenter;
 import com.yueban.architecturedemo.ui.main.presenter.impl.MainPresenter;
 import com.yueban.architecturedemo.util.CollectionUtil;
 import com.yueban.architecturedemo.util.rx.RxViewUtil;
+import io.reactivex.functions.Consumer;
 import java.util.List;
-import rx.functions.Action1;
 
 public class MainActivity extends BaseActivity implements IMainView {
     @BindView(R.id.text_view) TextView mTextView;
@@ -34,9 +34,9 @@ public class MainActivity extends BaseActivity implements IMainView {
 
     @Override
     protected void setView() {
-        RxViewUtil.clicks(mTextView).subscribe(new Action1<Void>() {
+        RxViewUtil.clicks(mTextView).subscribe(new Consumer<Object>() {
             @Override
-            public void call(Void aVoid) {
+            public void accept(Object o) throws Exception {
                 mPresenter.requestNetData();
             }
         });

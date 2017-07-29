@@ -2,9 +2,10 @@ package com.yueban.architecturedemo.util.rxlifecycle;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
-import com.trello.rxlifecycle.OutsideLifecycleException;
-import rx.Observable;
-import rx.functions.Func1;
+import com.trello.rxlifecycle2.OutsideLifecycleException;
+import io.reactivex.Observable;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.functions.Function;
 
 /**
  * @author yueban
@@ -12,10 +13,10 @@ import rx.functions.Func1;
  * @email fbzhh007@gmail.com
  */
 public interface PresenterLifecycleProvider {
-    Func1<PresenterEvent, PresenterEvent> PRESENTER_LIFECYCLE = new Func1<PresenterEvent, PresenterEvent>() {
+    Function<PresenterEvent, PresenterEvent> PRESENTER_LIFECYCLE = new Function<PresenterEvent, PresenterEvent>() {
         @Override
-        public PresenterEvent call(PresenterEvent lastEvent) {
-            switch (lastEvent) {
+        public PresenterEvent apply(@io.reactivex.annotations.NonNull PresenterEvent event) throws Exception {
+            switch (event) {
                 case CREATE:
                     return PresenterEvent.DESTROY;
                 case START:
@@ -29,38 +30,20 @@ public interface PresenterLifecycleProvider {
                 case DESTROY:
                     throw new OutsideLifecycleException("Cannot bind to Presenter lifecycle when outside of it.");
                 default:
-                    throw new UnsupportedOperationException("Binding to " + lastEvent + " not yet implemented");
+                    throw new UnsupportedOperationException("Binding to " + event + " not yet implemented");
             }
         }
     };
 
-    /**
-     * @return a sequence of {@link BasePresenter} lifecycle events
-     */
     @NonNull
     @CheckResult
     Observable<PresenterEvent> lifecycle();
 
-    /**
-     * Binds a source until a specific {@link PresenterEvent} occurs.
-     * <p>
-     * Intended for use with {@link Observable#compose(Observable.Transformer)}
-     *
-     * @param event the {@link PresenterEvent} that triggers unsubscription
-     * @return a reusable {@link rx.Observable.Transformer} which unsubscribes when the event triggers.
-     */
     @NonNull
     @CheckResult
-    <T> Observable.Transformer<T, T> bindUntilEvent(@NonNull PresenterEvent event);
+    <T> ObservableTransformer<T, T> bindUntilEvent(@NonNull PresenterEvent event);
 
-    /**
-     * Binds a source until the next reasonable {@link PresenterEvent} occurs.
-     * <p>
-     * Intended for use with {@link Observable#compose(Observable.Transformer)}
-     *
-     * @return a reusable {@link rx.Observable.Transformer} which unsubscribes at the correct time.
-     */
     @NonNull
     @CheckResult
-    <T> Observable.Transformer<T, T> bindToLifecycle();
+    <T> ObservableTransformer<T, T> bindToLifecycle();
 }
