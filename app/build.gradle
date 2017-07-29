@@ -13,6 +13,8 @@ android {
         versionCode globalConfig.getAt("androidVersionCode")
         versionName globalConfig.getAt("androidVersionName")
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        //support23.2.0 开始支持vector
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
