@@ -24,30 +24,22 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-# EventBus
--keepattributes *Annotation*
--keepclassmembers class ** {
-    @org.greenrobot.eventbus.Subscribe <methods>;
-}
--keep enum org.greenrobot.eventbus.ThreadMode { *; }
+-optimizationpasses 5
+-dontusemixedcaseclassnames   # 【混淆时不会产生形形色色的类名 】
+-dontskipnonpubliclibraryclasses  # 【指定不去忽略非公共的库类。 】
+-dontnote
+-dontpreverify #【不预校验】
+-dontwarn #不警告
+#-dontshrink
+#-dontoptimize
+-verbose
+-keepattributes InnerClasses,LineNumberTable
+-ignorewarnings #忽略警告
 
-# Only required if you use AsyncExecutor
--keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
-    <init>(java.lang.Throwable);
+# 不混淆javabean
+-keep class * implements android.os.Parcelable {
+  public static final android.os.Parcelable$Creator *;
 }
-
-# Retrofit
-# Platform calls Class.forName on types which do not exist on Android to determine platform.
--dontnote retrofit2.Platform
-# Platform used when running on Java 8 VMs. Will not be used at runtime.
--dontwarn retrofit2.Platform$Java8
-# Retain generic type information for use by reflection by converters and adapters.
--keepattributes Signature
-# Retain declared checked exceptions for use by a Proxy instance.
--keepattributes Exceptions
 
 # RxPermission
 -dontwarn com.tbruyelle.rxpermissions.**
-
-# Picasso
--dontwarn com.squareup.okhttp.**

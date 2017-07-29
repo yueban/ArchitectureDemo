@@ -5,6 +5,9 @@ allprojects {
         maven {
             url "https://jitpack.io"
         }
+        flatDir {
+            dirs 'libs' //this way we can find the .aar file in libs folder
+        }
     }
 }
 
@@ -39,6 +42,8 @@ ext {
     materialDialogVersion = "0.9.4.5"
     materialedittextVersion = "2.1.5-beta6"
     statusbarutilVersion = "1.4.0"
+    //proguard
+    proguardVersion = "2.0.1"
 
     //Test
     junitVersion = "4.12"
@@ -76,6 +81,19 @@ ext {
         materialDialog       : "com.afollestad.material-dialogs:commons:${materialDialogVersion}",
         materialedittext     : "com.github.david-wei:MaterialEditText:${materialedittextVersion}",
         statusbarutil        : "com.jaeger.statusbarutil:library:${statusbarutilVersion}",
+    ]
+
+    proguardDependencies = [
+        fastjsonProguard          : "com.github.yongjhih.android-proguards:alibaba-fastjson-pro:${proguardVersion}",
+        androidannotationsProguard: "com.github.yongjhih.android-proguards:androidannotations-pro:${proguardVersion}",
+        eventbus3Proguard         : "com.github.yongjhih.android-proguards:eventbus-3-pro:${proguardVersion}",
+        gsonProguard              : "com.github.yongjhih.android-proguards:gson-pro:${proguardVersion}",
+        okhttp3Proguard           : "com.github.yongjhih.android-proguards:okhttp3-pro:${proguardVersion}",
+        picassoProguard           : "com.github.yongjhih.android-proguards:picasso-pro:${proguardVersion}",
+        retrofit2Proguard         : "com.github.yongjhih.android-proguards:retrofit2-pro:${proguardVersion}",
+        supportDesignProguard     : "com.github.yongjhih.android-proguards:support-design-pro:${proguardVersion}",
+        supportV7AppcompatProguard: "com.github.yongjhih.android-proguards:support-v7-appcompat-pro:${proguardVersion}",
+        supportV7CardviewProguard : "com.github.yongjhih.android-proguards:support-v7-cardview-pro:${proguardVersion}",
     ]
 
     appTestDependencies = [

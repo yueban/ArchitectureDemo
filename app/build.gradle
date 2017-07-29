@@ -26,7 +26,7 @@ android {
         }
 
         release {
-            minifyEnabled false
+            minifyEnabled true
             zipAlignEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -51,13 +51,6 @@ android {
     }
 }
 
-repositories {
-    flatDir {
-        dirs 'libs' //this way we can find the .aar file in libs folder
-    }
-}
-
-//EventBus
 apt {
     arguments {
         eventBusIndex "com.yueban.architecturedemo.util.eventbus.EventBusIndex"
@@ -66,7 +59,6 @@ apt {
 
 dependencies {
     def dependencies = rootProject.ext.appDependencies
-
     compile dependencies.appcompt
     compile dependencies.design
     compile dependencies.recyclerview
@@ -98,6 +90,18 @@ dependencies {
     compile dependencies.materialDialog
     compile dependencies.materialedittext
     compile dependencies.statusbarutil
+
+    def proguardDependencies = rootProject.ext.proguardDependencies
+    compile proguardDependencies.fastjsonProguard
+    compile proguardDependencies.androidannotationsProguard
+    compile proguardDependencies.eventbus3Proguard
+    compile proguardDependencies.gsonProguard
+    compile proguardDependencies.okhttp3Proguard
+    compile proguardDependencies.picassoProguard
+    compile proguardDependencies.retrofit2Proguard
+    compile proguardDependencies.supportDesignProguard
+    compile proguardDependencies.supportV7AppcompatProguard
+    compile proguardDependencies.supportV7CardviewProguard
 
     def testDependencies = rootProject.ext.appTestDependencies
     testCompile testDependencies.junit
