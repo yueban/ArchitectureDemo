@@ -20,7 +20,7 @@ public class MainPresenter<T extends IMainView> extends BasePresenter<T> impleme
     @Override
     public void requestNetData() {
         MainViewData.listRepos("yueban")
-            .compose(RxUtil.<List<Repo>>common(mView))
+            .compose(RxUtil.<List<Repo>>commonWithDialog(mView))
             .compose(this.<List<Repo>>bindToDestroyEvent())
             .subscribe(new SimpleObserver<List<Repo>>() {
                 @Override

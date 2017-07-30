@@ -41,6 +41,16 @@ public interface IView {
     void finishView();
 
     /**
+     * 显示 loading
+     */
+    void showLoading();
+
+    /**
+     * 隐藏 loading
+     */
+    void hideLoading();
+
+    /**
      * 显示 loading 弹窗
      */
     void showLoadingDialog();

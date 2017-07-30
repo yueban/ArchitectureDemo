@@ -20,6 +20,7 @@ import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.RxLifecycle;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
+import com.yueban.architecturedemo.R;
 import com.yueban.architecturedemo.ui.base.presenter.BasePresenter;
 import com.yueban.architecturedemo.ui.base.presenter.IPresenter;
 import com.yueban.architecturedemo.util.L;
@@ -235,9 +236,20 @@ public abstract class BaseFragment extends Fragment implements IView, LifecycleP
     }
 
     @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
     public void showLoadingDialog() {
         if (mProgressDialog == null) {
-            mProgressDialog = new MaterialDialog.Builder(mActivity).progressIndeterminateStyle(false)
+            mProgressDialog = new MaterialDialog.Builder(mActivity).content(R.string.loading)
+                .progress(true, 0)
                 .cancelable(false)
                 .canceledOnTouchOutside(false)
                 .show();

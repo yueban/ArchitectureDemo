@@ -37,9 +37,34 @@ public class RxUtil {
     }
 
     /**
-     * 基于 {@link IView#showLoadingDialog()}
+     * 基于 {@link IView#showLoading()} {@link IView#hideLoading()}
      */
     public static <T> ObservableTransformer<T, T> loadingView(@NonNull final IView view) {
+        return new ObservableTransformer<T, T>() {
+            @Override
+            public ObservableSource<T> apply(@io.reactivex.annotations.NonNull Observable<T> upstream) {
+                return upstream.doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        view.showLoading();
+                    }
+                }).doAfterTerminate(new Action() {
+                    /**
+                     * 在调用 {@link Observer#onComplete()} 或者 {@link Observer#onError(Throwable)} 之后隐藏 loading
+                     */
+                    @Override
+                    public void run() throws Exception {
+                        view.hideLoading();
+                    }
+                });
+            }
+        };
+    }
+
+    /**
+     * 基于 {@link IView#showLoadingDialog()} {@link IView#hideLoadingDialog()}
+     */
+    public static <T> ObservableTransformer<T, T> loadingDialogView(@NonNull final IView view) {
         return new ObservableTransformer<T, T>() {
             @Override
             public ObservableSource<T> apply(@io.reactivex.annotations.NonNull Observable<T> upstream) {
@@ -154,6 +179,20 @@ public class RxUtil {
             public ObservableSource<T> apply(@io.reactivex.annotations.NonNull Observable<T> upstream) {
                 return upstream.compose(RxUtil.<T>applyAsySchedulers())
                     .compose(RxUtil.<T>loadingView(view))
+                    .compose(RxUtil.<T>error(view));
+            }
+        };
+    }
+
+    /**
+     * 常用的组合
+     */
+    public static <T> ObservableTransformer<T, T> commonWithDialog(final IView view) {
+        return new ObservableTransformer<T, T>() {
+            @Override
+            public ObservableSource<T> apply(@io.reactivex.annotations.NonNull Observable<T> upstream) {
+                return upstream.compose(RxUtil.<T>applyAsySchedulers())
+                    .compose(RxUtil.<T>loadingDialogView(view))
                     .compose(RxUtil.<T>error(view));
             }
         };

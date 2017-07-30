@@ -311,9 +311,20 @@ public abstract class BaseActivity extends AppCompatActivity implements IView, L
     }
 
     @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
     public final void showLoadingDialog() {
         if (mProgressDialog == null) {
-            mProgressDialog = new MaterialDialog.Builder(this).progressIndeterminateStyle(false)
+            mProgressDialog = new MaterialDialog.Builder(this).content(R.string.loading)
+                .progress(true, 0)
                 .cancelable(false)
                 .canceledOnTouchOutside(false)
                 .show();
