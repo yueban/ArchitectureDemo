@@ -72,6 +72,8 @@ android {
 dependencies {
     def dependencies = rootProject.ext.appDependencies
     compile dependencies.multiDex
+    debugCompile dependencies.leakcanary
+    releaseCompile dependencies.leakcanaryNoOp
     compile dependencies.appcompt
     compile dependencies.design
     compile dependencies.recyclerview
@@ -126,4 +128,5 @@ dependencies {
     def testDependencies = rootProject.ext.appTestDependencies
     testCompile testDependencies.junit
     androidTestCompile testDependencies.espresso
+    testCompile testDependencies.leakcanaryNoOp
 }

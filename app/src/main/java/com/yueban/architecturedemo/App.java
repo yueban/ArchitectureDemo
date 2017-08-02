@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import com.facebook.stetho.Stetho;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.squareup.leakcanary.LeakCanary;
 
 /**
  * @author yueban
@@ -21,6 +22,15 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        //LeakCanary Initialization
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+
+        //App Initialization
         sApp = this;
         initDatabase();
         initStetho();
