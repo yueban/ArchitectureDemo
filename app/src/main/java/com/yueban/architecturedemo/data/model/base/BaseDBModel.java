@@ -11,6 +11,18 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
  */
 public class BaseDBModel extends BaseModel implements Parcelable {
 
+    public static final Creator<BaseDBModel> CREATOR = new Creator<BaseDBModel>() {
+        @Override
+        public BaseDBModel createFromParcel(Parcel source) {
+            return new BaseDBModel(source);
+        }
+
+        @Override
+        public BaseDBModel[] newArray(int size) {
+            return new BaseDBModel[size];
+        }
+    };
+
     public BaseDBModel() {
     }
 
