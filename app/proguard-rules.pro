@@ -43,3 +43,6 @@
 
 # RxPermission
 -dontwarn com.tbruyelle.rxpermissions.**
+
+# DBFlow
+-keep class * extends com.raizlabs.android.dbflow.config.DatabaseHolder { *; }

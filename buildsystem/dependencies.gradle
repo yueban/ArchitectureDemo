@@ -25,6 +25,7 @@ ext {
     supportVersion = "25.3.1"
     constraintLayoutVersion = "1.0.2"
     commonUtilsVersion = "1.1.3"
+    dbflowVersion = "4.0.5"
     gsonVersion = "2.8.1"
     fastjsonVersion = "1.1.59"
     rxJavaVersion = '2.1.2'
@@ -56,6 +57,10 @@ ext {
         cardview             : "com.android.support:cardview-v7:${supportVersion}",
         constraintLayout     : "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}",
         commonUtils          : "com.luffykou:android-common-utils:${commonUtilsVersion}",
+        dbflowPrecessor      : "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflowVersion}",
+        dbflowCore           : "com.github.Raizlabs.DBFlow:dbflow-core:${dbflowVersion}",
+        dbflow               : "com.github.Raizlabs.DBFlow:dbflow:${dbflowVersion}",
+        dbflowRx2            : "com.github.Raizlabs.DBFlow:dbflow-rx2:${dbflowVersion}",
         gson                 : "com.google.code.gson:gson:${gsonVersion}",
         fastjson             : "com.alibaba:fastjson:${fastjsonVersion}.android",
         rxJava               : "io.reactivex.rxjava2:rxjava:${rxJavaVersion}",

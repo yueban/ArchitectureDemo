@@ -1,6 +1,6 @@
 package com.yueban.architecturedemo.ui.main.view;
 
-import com.yueban.architecturedemo.data.model.net.Repo;
+import com.yueban.architecturedemo.data.model.main.Repo;
 import com.yueban.architecturedemo.ui.base.view.IView;
 import com.yueban.architecturedemo.ui.main.event.NetworkCompleteEvent;
 import java.util.List;

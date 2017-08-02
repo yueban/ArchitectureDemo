@@ -1,6 +1,6 @@
 package com.yueban.architecturedemo.ui.main.presenter.impl;
 
-import com.yueban.architecturedemo.data.model.net.Repo;
+import com.yueban.architecturedemo.data.model.main.Repo;
 import com.yueban.architecturedemo.domain.main.MainViewData;
 import com.yueban.architecturedemo.ui.base.presenter.BasePresenter;
 import com.yueban.architecturedemo.ui.main.event.NetworkCompleteEvent;

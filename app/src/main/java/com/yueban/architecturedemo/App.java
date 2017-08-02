@@ -1,6 +1,7 @@
 package com.yueban.architecturedemo;
 
 import android.app.Application;
+import com.raizlabs.android.dbflow.config.FlowManager;
 
 /**
  * @author yueban
@@ -18,5 +19,10 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         sApp = this;
+        initDatabase();
+    }
+
+    private void initDatabase() {
+        FlowManager.init(this);
     }
 }

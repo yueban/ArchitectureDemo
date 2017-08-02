@@ -1,4 +1,4 @@
-package com.yueban.architecturedemo.data.model.net;
+package com.yueban.architecturedemo.data.model;
 
 import com.google.gson.annotations.SerializedName;
 

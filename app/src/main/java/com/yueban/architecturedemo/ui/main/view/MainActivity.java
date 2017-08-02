@@ -3,7 +3,7 @@ package com.yueban.architecturedemo.ui.main.view;
 import android.widget.TextView;
 import butterknife.BindView;
 import com.yueban.architecturedemo.R;
-import com.yueban.architecturedemo.data.model.net.Repo;
+import com.yueban.architecturedemo.data.model.main.Repo;
 import com.yueban.architecturedemo.ui.base.presenter.IPresenter;
 import com.yueban.architecturedemo.ui.base.view.BaseActivity;
 import com.yueban.architecturedemo.ui.main.event.NetworkCompleteEvent;

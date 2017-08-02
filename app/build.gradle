@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     def globalConfig = rootProject.extensions.getByName("ext")
@@ -15,6 +14,14 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         //support23.2.0 开始支持vector
         vectorDrawables.useSupportLibrary = true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                    eventBusIndex: "com.yueban.architecturedemo.util.eventbus.EventBusIndex",
+                ]
+            }
+        }
     }
 
     buildTypes {
@@ -51,12 +58,6 @@ android {
     }
 }
 
-apt {
-    arguments {
-        eventBusIndex "com.yueban.architecturedemo.util.eventbus.EventBusIndex"
-    }
-}
-
 dependencies {
     def dependencies = rootProject.ext.appDependencies
     compile dependencies.appcompt
@@ -65,6 +66,10 @@ dependencies {
     compile dependencies.cardview
     compile dependencies.constraintLayout
     compile dependencies.commonUtils
+    annotationProcessor dependencies.dbflowPrecessor
+    compile dependencies.dbflowCore
+    compile dependencies.dbflow
+    compile dependencies.dbflowRx2
     compile dependencies.gson
     compile dependencies.fastjson
     compile dependencies.rxJava
@@ -72,7 +77,7 @@ dependencies {
     compile dependencies.rxlifecycle
     compile dependencies.rxlifecycleComponents
     compile dependencies.eventBus
-    apt dependencies.eventBusProcessor
+    annotationProcessor dependencies.eventBusProcessor
     compile dependencies.retrofit
     compile dependencies.retrofitAdapterRxJava
     compile dependencies.rxbinding
@@ -81,8 +86,8 @@ dependencies {
     compile dependencies.rxbindingDesign
     compile dependencies.rxbindingRecycleView
     compile dependencies.butterKnife
-    apt dependencies.butterKnifeCompiler
-    apt dependencies.bundlerAnnotations
+    annotationProcessor dependencies.butterKnifeCompiler
+    annotationProcessor dependencies.bundlerAnnotations
     compile dependencies.bundlerCompiler
     compile dependencies.rxPermissions
     compile dependencies.picasso
