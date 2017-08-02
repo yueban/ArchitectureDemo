@@ -14,6 +14,8 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         //support23.2.0 开始支持vector
         vectorDrawables.useSupportLibrary = true
+        //multidex
+        multiDexEnabled true
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -56,10 +58,20 @@ android {
         exclude 'META-INF/MANIFEST.MF'
         exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
+
+    productFlavors {
+        dev {
+            // Enable pre-dexing to produce an APK that can be tested on
+            // Android 5.0+ without the time-consuming DEX build processes.
+            minSdkVersion 21
+        }
+        rel {}
+    }
 }
 
 dependencies {
     def dependencies = rootProject.ext.appDependencies
+    compile dependencies.multiDex
     compile dependencies.appcompt
     compile dependencies.design
     compile dependencies.recyclerview
@@ -79,6 +91,8 @@ dependencies {
     compile dependencies.eventBus
     annotationProcessor dependencies.eventBusProcessor
     compile dependencies.retrofit
+    compile dependencies.stetho
+    compile dependencies.stethoOkhttp3
     compile dependencies.retrofitAdapterRxJava
     compile dependencies.rxbinding
     compile dependencies.rxbindingV4
@@ -104,6 +118,7 @@ dependencies {
     compile proguardDependencies.okhttp3Proguard
     compile proguardDependencies.picassoProguard
     compile proguardDependencies.retrofit2Proguard
+    compile proguardDependencies.stethoProguard
     compile proguardDependencies.supportDesignProguard
     compile proguardDependencies.supportV7AppcompatProguard
     compile proguardDependencies.supportV7CardviewProguard

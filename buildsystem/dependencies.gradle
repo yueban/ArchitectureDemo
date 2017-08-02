@@ -22,6 +22,7 @@ ext {
     androidApplicationId = "com.yueban.architecturedemo"
 
     //Library
+    multiDexVersion = "1.0.1"
     supportVersion = "25.3.1"
     constraintLayoutVersion = "1.0.2"
     commonUtilsVersion = "1.1.3"
@@ -34,6 +35,7 @@ ext {
     eventBusVersion = "3.0.0"
     eventBusProcessorVersion = "3.0.1"
     retrofitVersion = "2.3.0"
+    stethoVersion = "1.5.0"
     rxbindingVersion = "2.0.0"
     butterKnifeVersion = '8.7.0'
     bundlerVersion = "0.1.1"
@@ -51,6 +53,7 @@ ext {
     espressoVersion = "2.2.2"
 
     appDependencies = [
+        multiDex             : "com.android.support:multidex:${multiDexVersion}",
         appcompt             : "com.android.support:appcompat-v7:${supportVersion}",
         design               : "com.android.support:design:${supportVersion}",
         recyclerview         : "com.android.support:recyclerview-v7:${supportVersion}",
@@ -71,6 +74,8 @@ ext {
         eventBusProcessor    : "org.greenrobot:eventbus-annotation-processor:${eventBusProcessorVersion}",
         retrofit             : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
         retrofitAdapterRxJava: "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}",
+        stetho               : "com.facebook.stetho:stetho:${stethoVersion}",
+        stethoOkhttp3        : "com.facebook.stetho:stetho-okhttp3:${stethoVersion}",
         rxbinding            : "com.jakewharton.rxbinding2:rxbinding:${rxbindingVersion}",
         rxbindingV4          : "com.jakewharton.rxbinding2:rxbinding-support-v4:${rxbindingVersion}",
         rxbindingV7          : "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:${rxbindingVersion}",
@@ -96,6 +101,7 @@ ext {
         okhttp3Proguard           : "com.github.yongjhih.android-proguards:okhttp3-pro:${proguardVersion}",
         picassoProguard           : "com.github.yongjhih.android-proguards:picasso-pro:${proguardVersion}",
         retrofit2Proguard         : "com.github.yongjhih.android-proguards:retrofit2-pro:${proguardVersion}",
+        stethoProguard            : "com.github.yongjhih.android-proguards:facebook-stetho-pro:${proguardVersion}",
         supportDesignProguard     : "com.github.yongjhih.android-proguards:support-design-pro:${proguardVersion}",
         supportV7AppcompatProguard: "com.github.yongjhih.android-proguards:support-v7-appcompat-pro:${proguardVersion}",
         supportV7CardviewProguard : "com.github.yongjhih.android-proguards:support-v7-cardview-pro:${proguardVersion}",

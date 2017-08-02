@@ -1,6 +1,7 @@
 package com.yueban.architecturedemo.data.net;
 
 import android.text.TextUtils;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.yueban.architecturedemo.BuildConfig;
@@ -25,7 +26,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
  * @date 2017/7/29
  * @email fbzhh007@gmail.com
  */
-public final class RetrofitInstance {
+final class RetrofitInstance {
     private final Retrofit mRetrofit;
 
     private RetrofitInstance() {
@@ -49,7 +50,7 @@ public final class RetrofitInstance {
         mRetrofit = builder.build();
     }
 
-    public static Retrofit getInstance() {
+    static Retrofit getInstance() {
         return Holder.INSTANCE.mRetrofit;
     }
 
@@ -61,8 +62,8 @@ public final class RetrofitInstance {
 
         //stetho网络监控
         if (BuildConfig.DEBUG) {
+            clientBuilder.addNetworkInterceptor(new StethoInterceptor());
             // TODO: 2017/7/29 add Interceptor
-            //clientBuilder.addNetworkInterceptor(new StethoInterceptor());
             //clientBuilder.addInterceptor(new MockInterceptor());
 
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -95,7 +96,7 @@ public final class RetrofitInstance {
         return clientBuilder.build();
     }
 
-    static class Holder {
+    private static class Holder {
         static final RetrofitInstance INSTANCE = new RetrofitInstance();
     }
 }
