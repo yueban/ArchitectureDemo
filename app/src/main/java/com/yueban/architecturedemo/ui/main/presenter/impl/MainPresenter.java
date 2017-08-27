@@ -8,7 +8,7 @@ import com.yueban.architecturedemo.ui.main.presenter.IMainPresenter;
 import com.yueban.architecturedemo.ui.main.view.IMainView;
 import com.yueban.architecturedemo.util.eventbus.EventBusInstance;
 import com.yueban.architecturedemo.util.rx.RxUtil;
-import com.yueban.architecturedemo.util.rx.SimpleObserver;
+import io.reactivex.functions.Consumer;
 import java.util.List;
 
 /**
@@ -16,22 +16,18 @@ import java.util.List;
  * @date 2017/7/29
  * @email fbzhh007@gmail.com
  */
-public class MainPresenter<T extends IMainView> extends BasePresenter<T> implements IMainPresenter {
-    @Override
-    public void requestNetData() {
-        MainViewData.listRepos("yueban")
-            .compose(RxUtil.<List<Repo>>commonWithDialog(mView))
-            .compose(this.<List<Repo>>bindToDestroyEvent())
-            .subscribe(new SimpleObserver<List<Repo>>() {
-                @Override
-                public void onNext(List<Repo> repos) {
-                    mView.showRepoData(repos);
-                }
-
-                @Override
-                public void onComplete() {
-                    EventBusInstance.getBus().post(new NetworkCompleteEvent());
-                }
-            });
-    }
+public class MainPresenter extends BasePresenter<IMainView> implements IMainPresenter {
+  @Override
+  public void requestNetData() {
+    MainViewData.listRepos("yueban")
+        .compose(RxUtil.<List<Repo>>commonDialog(mView))
+        .compose(this.<List<Repo>>bindToDestroyEvent())
+        .subscribe(new Consumer<List<Repo>>() {
+          @Override
+          public void accept(List<Repo> repos) throws Exception {
+            mView.showRepoData(repos);
+            EventBusInstance.getBus().post(new NetworkCompleteEvent());
+          }
+        });
+  }
 }

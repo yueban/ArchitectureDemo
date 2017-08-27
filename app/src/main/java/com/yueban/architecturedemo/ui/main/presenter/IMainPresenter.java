@@ -8,5 +8,5 @@ import com.yueban.architecturedemo.ui.base.presenter.IPresenter;
  * @email fbzhh007@gmail.com
  */
 public interface IMainPresenter extends IPresenter {
-    void requestNetData();
+  void requestNetData();
 }

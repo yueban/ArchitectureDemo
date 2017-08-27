@@ -12,13 +12,12 @@ import java.lang.annotation.RetentionPolicy;
 @IntDef({ ErrorCode.NotFound, ErrorCode.MethodNotAllowed })
 @Retention(RetentionPolicy.SOURCE)
 public @interface ErrorCode {
-    /**
-     * 找不到该请求地址
-     */
-    int NotFound = 404;
-
-    /**
-     * 不支持的提交方式
-     */
-    int MethodNotAllowed = 405;
+  /**
+   * 找不到该请求地址
+   */
+  int NotFound = 404;
+  /**
+   * 不支持的提交方式
+   */
+  int MethodNotAllowed = 405;
 }

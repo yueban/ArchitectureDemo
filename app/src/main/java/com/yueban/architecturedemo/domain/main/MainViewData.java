@@ -14,19 +14,19 @@ import java.util.List;
  * @email fbzhh007@gmail.com
  */
 public class MainViewData {
-    private static final NetRepository NET_REPOSITORY = NetRepository.getInstance();
-    private static final IMainDataSource MAIN_DATA_SOURCE = MainDataSourceDB.getInstance();
+  private static final NetRepository NET_REPOSITORY = NetRepository.getInstance();
+  private static final IMainDataSource MAIN_DATA_SOURCE = MainDataSourceDB.getInstance();
 
-    private MainViewData() {
-        throw new AssertionError();
-    }
+  private MainViewData() {
+    throw new AssertionError();
+  }
 
-    public static Observable<List<Repo>> listRepos(String user) {
-        return NET_REPOSITORY.getApiService().listRepos(user).doOnNext(new Consumer<List<Repo>>() {
-            @Override
-            public void accept(List<Repo> repos) throws Exception {
-                MAIN_DATA_SOURCE.saveRepos(repos).subscribe();
-            }
-        });
-    }
+  public static Observable<List<Repo>> listRepos(String user) {
+    return NET_REPOSITORY.getApiService().listRepos(user).doOnNext(new Consumer<List<Repo>>() {
+      @Override
+      public void accept(List<Repo> repos) throws Exception {
+        MAIN_DATA_SOURCE.saveRepos(repos).subscribe();
+      }
+    });
+  }
 }

@@ -12,19 +12,19 @@ import java.util.List;
  * @email fbzhh007@gmail.com
  */
 public class MainDataSourceDB implements IMainDataSource {
-    private MainDataSourceDB() {
-    }
+  private MainDataSourceDB() {
+  }
 
-    public static MainDataSourceDB getInstance() {
-        return Holder.INSTANCE;
-    }
+  public static MainDataSourceDB getInstance() {
+    return Holder.INSTANCE;
+  }
 
-    @Override
-    public Observable<Boolean> saveRepos(List<Repo> repoList) {
-        return DBHelper.save(repoList);
-    }
+  @Override
+  public Observable<Boolean> saveRepos(List<Repo> repoList) {
+    return DBHelper.save(repoList);
+  }
 
-    private static class Holder {
-        private static final MainDataSourceDB INSTANCE = new MainDataSourceDB();
-    }
+  private static class Holder {
+    private static final MainDataSourceDB INSTANCE = new MainDataSourceDB();
+  }
 }

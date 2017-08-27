@@ -9,22 +9,22 @@ import io.reactivex.Observer;
  * @email fbzhh007@gmail.com
  */
 public final class Preconditions {
-    private Preconditions() {
-        throw new AssertionError("No instances.");
-    }
+  private Preconditions() {
+    throw new AssertionError("No instances.");
+  }
 
-    public static void checkNotNull(Object value, String message) {
-        if (value == null) {
-            throw new NullPointerException(message);
-        }
+  public static void checkNotNull(Object value, String message) {
+    if (value == null) {
+      throw new NullPointerException(message);
     }
+  }
 
-    public static boolean checkMainThread(Observer<?> observer) {
-        if (Looper.myLooper() != Looper.getMainLooper()) {
-            observer.onError(new IllegalStateException(
-                "Expected to be called on the main thread but was " + Thread.currentThread().getName()));
-            return false;
-        }
-        return true;
+  public static boolean checkMainThread(Observer<?> observer) {
+    if (Looper.myLooper() != Looper.getMainLooper()) {
+      observer.onError(
+          new IllegalStateException("Expected to be called on the main thread but was " + Thread.currentThread().getName()));
+      return false;
     }
+    return true;
+  }
 }

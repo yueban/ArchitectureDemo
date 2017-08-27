@@ -12,6 +12,6 @@ import retrofit2.http.Path;
  * @email fbzhh007@gmail.com
  */
 public interface IApiService {
-    @GET("users/{user}/repos")
-    Observable<List<Repo>> listRepos(@Path("user") String user);
+  @GET("users/{user}/repos")
+  Observable<List<Repo>> listRepos(@Path("user") String user);
 }

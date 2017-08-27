@@ -27,76 +27,76 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
  * @email fbzhh007@gmail.com
  */
 final class RetrofitInstance {
-    private final Retrofit mRetrofit;
+  private final Retrofit mRetrofit;
 
-    private RetrofitInstance() {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create();
+  private RetrofitInstance() {
+    Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create();
 
-        Retrofit.Builder builder = new Retrofit.Builder().baseUrl(NetConstant.BASE_URL)
-            .client(getOkHttpClient())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create());
+    Retrofit.Builder builder = new Retrofit.Builder().baseUrl(NetConstant.BASE_URL)
+        .client(getOkHttpClient())
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create());
 
-        try {
-            // 修改retrofit的convertFactories的设置, 去掉其默认值BuiltInConverters(), 替换为GsonConvertFactory.
-            List<Converter.Factory> convertFactories = new ArrayList<>();
-            convertFactories.add(GsonConverterFactory.create(gson));
-            Field field = builder.getClass().getDeclaredField("converterFactories");
-            field.setAccessible(true);
-            field.set(builder, convertFactories);
-        } catch (Exception e) {
-            builder.addConverterFactory(GsonConverterFactory.create(gson));
+    try {
+      // 修改retrofit的convertFactories的设置, 去掉其默认值BuiltInConverters(), 替换为GsonConvertFactory.
+      List<Converter.Factory> convertFactories = new ArrayList<>();
+      convertFactories.add(GsonConverterFactory.create(gson));
+      Field field = builder.getClass().getDeclaredField("converterFactories");
+      field.setAccessible(true);
+      field.set(builder, convertFactories);
+    } catch (Exception e) {
+      builder.addConverterFactory(GsonConverterFactory.create(gson));
+    }
+
+    mRetrofit = builder.build();
+  }
+
+  static Retrofit getInstance() {
+    return Holder.INSTANCE.mRetrofit;
+  }
+
+  private OkHttpClient getOkHttpClient() {
+    OkHttpClient.Builder clientBuilder =
+        new OkHttpClient.Builder().connectTimeout(NetConstant.API_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
+            .readTimeout(NetConstant.API_READ_TIMEOUT, TimeUnit.MILLISECONDS)
+            .writeTimeout(NetConstant.API_WRITE_TIMEOUT, TimeUnit.MILLISECONDS);
+
+    //stetho网络监控
+    if (BuildConfig.DEBUG) {
+      clientBuilder.addNetworkInterceptor(new StethoInterceptor());
+      // TODO: 2017/7/29 add Interceptor
+      //clientBuilder.addInterceptor(new MockInterceptor());
+
+      HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+      logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+      clientBuilder.addInterceptor(logging);
+    }
+
+    clientBuilder.addInterceptor(new Interceptor() {
+      @Override
+      public Response intercept(Chain chain) throws IOException {
+
+        Request request = chain.request();
+
+        HttpUrl api = HttpUrl.parse(NetConstant.BASE_URL);
+
+        // 如果不是请求 API ， 不添加额外的参数
+        if (!TextUtils.equals(request.url().host(), api.host())) {
+          return chain.proceed(request);
         }
 
-        mRetrofit = builder.build();
-    }
+        HttpUrl newUrl = request.url()
+            .newBuilder()
+            .addEncodedQueryParameter("format", "json")
+            .addEncodedQueryParameter("account", "true")
+            .build();
+        request = request.newBuilder().url(newUrl).build();
+        return chain.proceed(request);
+      }
+    });
+    return clientBuilder.build();
+  }
 
-    static Retrofit getInstance() {
-        return Holder.INSTANCE.mRetrofit;
-    }
-
-    private OkHttpClient getOkHttpClient() {
-        OkHttpClient.Builder clientBuilder =
-            new OkHttpClient.Builder().connectTimeout(NetConstant.API_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
-                .readTimeout(NetConstant.API_READ_TIMEOUT, TimeUnit.MILLISECONDS)
-                .writeTimeout(NetConstant.API_WRITE_TIMEOUT, TimeUnit.MILLISECONDS);
-
-        //stetho网络监控
-        if (BuildConfig.DEBUG) {
-            clientBuilder.addNetworkInterceptor(new StethoInterceptor());
-            // TODO: 2017/7/29 add Interceptor
-            //clientBuilder.addInterceptor(new MockInterceptor());
-
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            clientBuilder.addInterceptor(logging);
-        }
-
-        clientBuilder.addInterceptor(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-
-                Request request = chain.request();
-
-                HttpUrl api = HttpUrl.parse(NetConstant.BASE_URL);
-
-                // 如果不是请求 API ， 不添加额外的参数
-                if (!TextUtils.equals(request.url().host(), api.host())) {
-                    return chain.proceed(request);
-                }
-
-                HttpUrl newUrl = request.url()
-                    .newBuilder()
-                    .addEncodedQueryParameter("format", "json")
-                    .addEncodedQueryParameter("account", "true")
-                    .build();
-                request = request.newBuilder().url(newUrl).build();
-                return chain.proceed(request);
-            }
-        });
-        return clientBuilder.build();
-    }
-
-    private static class Holder {
-        static final RetrofitInstance INSTANCE = new RetrofitInstance();
-    }
+  private static class Holder {
+    static final RetrofitInstance INSTANCE = new RetrofitInstance();
+  }
 }

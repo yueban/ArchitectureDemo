@@ -9,22 +9,22 @@ import retrofit2.Retrofit;
  * @email fbzhh007@gmail.com
  */
 public class NetRepository {
-    private final IApiService mApiService;
+  private final IApiService mApiService;
 
-    private NetRepository() {
-        Retrofit retrofit = RetrofitInstance.getInstance();
-        mApiService = retrofit.create(IApiService.class);
-    }
+  private NetRepository() {
+    Retrofit retrofit = RetrofitInstance.getInstance();
+    mApiService = retrofit.create(IApiService.class);
+  }
 
-    public static NetRepository getInstance() {
-        return Holder.INSTANCE;
-    }
+  public static NetRepository getInstance() {
+    return Holder.INSTANCE;
+  }
 
-    public IApiService getApiService() {
-        return mApiService;
-    }
+  public IApiService getApiService() {
+    return mApiService;
+  }
 
-    static class Holder {
-        static final NetRepository INSTANCE = new NetRepository();
-    }
+  static class Holder {
+    static final NetRepository INSTANCE = new NetRepository();
+  }
 }

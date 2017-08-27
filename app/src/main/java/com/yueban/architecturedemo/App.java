@@ -13,42 +13,42 @@ import com.squareup.leakcanary.LeakCanary;
  * @email fbzhh007@gmail.com
  */
 public class App extends Application {
-    private static App sApp;
+  private static App sApp;
 
-    public static App getApp() {
-        return sApp;
+  public static App getApp() {
+    return sApp;
+  }
+
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    //LeakCanary Initialization
+    if (LeakCanary.isInAnalyzerProcess(this)) {
+      // This process is dedicated to LeakCanary for heap analysis.
+      // You should not init your app in this process.
+      return;
     }
+    LeakCanary.install(this);
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        //LeakCanary Initialization
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        LeakCanary.install(this);
+    //App Initialization
+    sApp = this;
+    initDatabase();
+    initStetho();
+  }
 
-        //App Initialization
-        sApp = this;
-        initDatabase();
-        initStetho();
+  private void initDatabase() {
+    FlowManager.init(this);
+  }
+
+  private void initStetho() {
+    if (BuildConfig.DEBUG) {
+      Stetho.initializeWithDefaults(this);
     }
+  }
 
-    private void initDatabase() {
-        FlowManager.init(this);
-    }
-
-    private void initStetho() {
-        if (BuildConfig.DEBUG) {
-            Stetho.initializeWithDefaults(this);
-        }
-    }
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
+  @Override
+  protected void attachBaseContext(Context base) {
+    super.attachBaseContext(base);
+    MultiDex.install(this);
+  }
 }

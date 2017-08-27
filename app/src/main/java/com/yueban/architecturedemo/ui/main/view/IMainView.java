@@ -12,8 +12,8 @@ import org.greenrobot.eventbus.Subscribe;
  * @email fbzhh007@gmail.com
  */
 public interface IMainView extends IView {
-    void showRepoData(List<Repo> repos);
+  void showRepoData(List<Repo> repos);
 
-    @Subscribe
-    void onNetworkCompleteEvent(NetworkCompleteEvent networkCompleteEvent);
+  @Subscribe
+  void onNetworkCompleteEvent(NetworkCompleteEvent networkCompleteEvent);
 }

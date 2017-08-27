@@ -6,5 +6,5 @@ package com.yueban.architecturedemo.util.rxlifecycle;
  * @email fbzhh007@gmail.com
  */
 public enum PresenterEvent {
-    CREATE, START, RESUME, PAUSE, STOP, DESTROY
+  CREATE, START, RESUME, PAUSE, STOP, DESTROY
 }

@@ -10,5 +10,5 @@ import java.util.List;
  * @email fbzhh007@gmail.com
  */
 public interface IMainDataSource {
-    Observable<Boolean> saveRepos(List<Repo> repoList);
+  Observable<Boolean> saveRepos(List<Repo> repoList);
 }
